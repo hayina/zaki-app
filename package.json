@@ -1,0 +1,33 @@
+{
+  "name": "zaki-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+
+    "dev": "webpack -d && webpack-dev-server --content-base src/ --inline --hot"
+
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hayina/zaki-app.git"
+  },
+  "author": "Youssef LECHQAR",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hayina/zaki-app/issues"
+  },
+  "homepage": "https://github.com/hayina/zaki-app#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-react": "^6.24.1",
+    "webpack": "^3.11.0",
+    "webpack-dev-server": "^2.11.1"
+  },
+  "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  }
+}
