@@ -1,0 +1,21 @@
+{
+    "extends": "airbnb",
+
+    "env": {
+        "browser": true,
+        "node": true
+    },
+
+    "rules": {
+        "quotes" : 0,
+        "react/jsx-filename-extension" : 0,
+        "react/jsx-indent" : 0,
+        "linebreak-style" : 0,
+        "no-multiple-empty-lines" : 0,
+        "indent" : 0,
+        "padded-blocks" : 0,
+        
+        "no-useless-constructor" : 0,
+        "react/prefer-stateless-function" : 0
+    }
+}

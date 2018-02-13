@@ -13,7 +13,7 @@ export default class Layout extends React.Component {
             <div>
                 <h1>Hello, Lam!</h1>
             </div>
-        )
+        );
     }
 
 }
