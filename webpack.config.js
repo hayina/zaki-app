@@ -2,6 +2,8 @@
 
 module.exports = {
 
+    // devtool: 'source-map',
+
     entry: './src/app.js',
 
     output: {
@@ -15,9 +17,13 @@ module.exports = {
             use: {
               loader: 'babel-loader',
               options: {
-                presets: ['react']
+                presets: ['react', 'env']
               }
             }
+          },
+          {
+            test: /\.css$/,
+            use: ['style-loader', 'css-loader']
           }
         ]
       }

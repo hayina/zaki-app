@@ -14,6 +14,14 @@
         "no-multiple-empty-lines" : 0,
         "indent" : 0,
         "padded-blocks" : 0,
+        "comma-dangle" : 0,
+        "semi" : 0,
+        "no-trailing-spaces" : 0,
+        "no-unused-vars" : 0,
+        "jsx-a11y/label-has-for" : 0,
+        "arrow-parens" : 0,
+        "react/prop-types" : 0,
+        "react/self-closing-comp" : 0,
         
         "no-useless-constructor" : 0,
         "react/prefer-stateless-function" : 0

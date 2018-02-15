@@ -1,4 +1,8 @@
 import React from "react";
+import Header from "./header"
+import Footer from "./footer"
+import ProductForm from "../forms/productForm"
+
 
 
 
@@ -11,10 +15,13 @@ export default class Layout extends React.Component {
     render() {
         return (
             <div>
-                <h1>Hello, Lam!</h1>
-            </div>
+                <Header />
+                <ProductForm />
+                <Footer />
+            </div>            
         );
     }
 
 }
+
 
