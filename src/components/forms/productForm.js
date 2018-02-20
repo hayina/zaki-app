@@ -6,39 +6,91 @@ import '../../css/productForm.css'
 
 export default class ProductForm extends React.Component {
 
+
     constructor(props) {
+
         super(props);
-        this.state = {
-            isPromotion: true,
-            prix: '10'
+
+        const fields = {
+            isPromotion: false,
+            prix: '',
+            prixPromotion: '',
+            description: ''
         }
+
+
+        this.state = {
+            fields,
+            hasError: false
+        }
+
         this.handleInputChange = this.handleInputChange.bind(this);
     }
 
-    // handlePromotionCheck() {
-    //     this.setState({
-    //         isPromotion: !this.state.isPromotion
-    //     })
-    // }
-
     handleInputChange(event) {
-        
         const { target } = event;
+        this.setState({
+            fields: { ...this.state.fields, [target.name]: target.type === 'checkbox' ? target.checked : target.value }
+        });
+    }
+
+    validateForm() {
+
+        const errors = {
+            prixError: '',
+            prixPromotionError: '',
+            descriptionError: ''
+        }
+
+        let hasError = false;
+
+        if (this.state.fields.description.length < 1) {
+            errors.descriptionError = "Le champs description est obligatoire"
+            hasError = true;
+        }
+
+        const { prix } = this.state.fields
+
+        if (prix.length > 0) {
+            if (isNaN(parseFloat(prix)) || !isFinite(prix)) {
+                errors.prixError = "Le champs prix doit être un nombre"
+                hasError = true;
+            }
+        } else {
+            errors.prixError = "Le champs prix est obligatoire"
+            hasError = true;
+        }
+
+        if (this.state.fields.isPromotion && this.state.fields.prixPromotion.length < 1) {
+            errors.prixPromotionError = "Le champs prix promotion est obligatoire"
+            hasError = true;
+        }
 
         this.setState({
-            [target.name]: target.type === 'checkbox' ? target.checked : target.value
-        });
+            errors,
+            hasError
+        }, () => console.log("Finish Validating ...", this.state));
+
+        return hasError
+    }
+
+    submitForm() {
+        console.log("Start Validating ...", this.state)
+
+        const isValid = this.validateForm();
+
+        console.log("Submiting ...")
     }
 
     render() {
 
-        const showPromotionChek = this.state.isPromotion ? '' : 'hidden'
+    
 
         return (
             <form action="">
                 <div className="form-data-wr">
 
-                    <div className="form-line">
+                    {/* <div className="form-line">
                         <Label label="categorie" />
                         <div className="form-data">
      
@@ -54,45 +106,64 @@ export default class ProductForm extends React.Component {
                             </div>
 
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="form-line">
                         <Label label="description" />
                         <div className="form-data">
-                            <textarea name="description" rows="10"></textarea>
+                            <textarea
+                                name="description" rows="10"
+                                value={this.state.fields.description} onChange={this.handleInputChange}
+                            />
+                            {
+                                this.state.hasError && this.state.errors.descriptionError.length > 0 &&
+                                <div className="error-validation text-danger">{this.state.errors.descriptionError}</div>
+                            }
                         </div>
                     </div>
 
                     <div className="form-line">
-                        <Label label="prix" />({this.state.prix})
-                        <div className="form-data">
-                            <input type="text" name="prix" value={this.state.prix} onChange={this.handleInputChange} />
-                        </div>
-                    </div>
-
-                    <div className="form-line">
-                        <Label label="Promotion" />({this.state.isPromotion})
+                        <Label label="prix" />
                         <div className="form-data">
                             <input
-                                type="checkbox"
-                                name="isPromotion"
-                                checked={this.state.isPromotion}
-                                onChange={this.handleInputChange}
+                                type="text" name="prix"
+                                value={this.state.fields.prix} onChange={this.handleInputChange}
+                            />
+                            {
+                                this.state.hasError && this.state.errors.prixError.length > 0 &&
+                                <div className="error-validation text-danger">{this.state.errors.prixError}</div>
+                            }
+                        </div>
+                    </div>
+
+                    <div className="form-line">
+                        <Label label="Promotion" />
+                        <div className="form-data">
+                            <input
+                                type="checkbox" name="isPromotion"
+                                checked={this.state.fields.isPromotion} onChange={this.handleInputChange}
                             />
                         </div>
                     </div>
 
-                    <div className={"form-line " + showPromotionChek}>
+                    <div className={"form-line" + (this.state.fields.isPromotion ? '' : ' hidden')}>
                         <Label label="Prix Promotion" />
                         <div className="form-data">
-                            <input type="text" name="prixPromotion" />
+                            <input 
+                                type="text" name="prixPromotion" 
+                                checked={this.state.fields.prixPromotion} onChange={this.handleInputChange}
+                            />
+                            {
+                                this.state.hasError && this.state.errors.prixPromotionError.length > 0 &&
+                                <div className="error-validation text-danger">{this.state.errors.prixPromotionError}</div>
+                            }
                         </div>
                     </div>
 
                 </div>
 
                 <div className="form-validation">
-                    <button type="button" className="btn btn-success">Submit</button>
+                    <button type="button" className="btn btn-success" onClick={() => this.submitForm()}>Submit</button>
                 </div>
 
             </form>
