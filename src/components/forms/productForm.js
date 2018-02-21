@@ -1,5 +1,6 @@
 import React from 'react';
 import Label from './formItems/label'
+import ValidationError from './validationError'
 
 
 import '../../css/productForm.css'
@@ -18,9 +19,16 @@ export default class ProductForm extends React.Component {
             description: ''
         }
 
+        const errors = {
+            prixError: '',
+            prixPromotionError: '',
+            descriptionError: ''
+        }
+
 
         this.state = {
             fields,
+            errors,
             hasError: false
         }
 
@@ -75,11 +83,13 @@ export default class ProductForm extends React.Component {
     }
 
     submitForm() {
-        console.log("Start Validating ...", this.state)
+        console.log("Start Validating ...")
 
-        const isValid = this.validateForm();
+        const hasError = this.validateForm();
 
-        console.log("Submiting ...")
+        if (!hasError) {
+            console.log("Submiting ...")
+        }
     }
 
     render() {
@@ -115,10 +125,7 @@ export default class ProductForm extends React.Component {
                                 name="description" rows="10"
                                 value={this.state.fields.description} onChange={this.handleInputChange}
                             />
-                            {
-                                this.state.hasError && this.state.errors.descriptionError.length > 0 &&
-                                <div className="error-validation text-danger">{this.state.errors.descriptionError}</div>
-                            }
+                            <ValidationError hasError={this.state.hasError} textError={this.state.errors.descriptionError} />
                         </div>
                     </div>
 
@@ -129,10 +136,7 @@ export default class ProductForm extends React.Component {
                                 type="text" name="prix"
                                 value={this.state.fields.prix} onChange={this.handleInputChange}
                             />
-                            {
-                                this.state.hasError && this.state.errors.prixError.length > 0 &&
-                                <div className="error-validation text-danger">{this.state.errors.prixError}</div>
-                            }
+                            <ValidationError hasError={this.state.hasError} textError={this.state.errors.prixError} />
                         </div>
                     </div>
 
@@ -153,10 +157,7 @@ export default class ProductForm extends React.Component {
                                 type="text" name="prixPromotion" 
                                 checked={this.state.fields.prixPromotion} onChange={this.handleInputChange}
                             />
-                            {
-                                this.state.hasError && this.state.errors.prixPromotionError.length > 0 &&
-                                <div className="error-validation text-danger">{this.state.errors.prixPromotionError}</div>
-                            }
+                            <ValidationError hasError={this.state.hasError} textError={this.state.errors.prixPromotionError} />
                         </div>
                     </div>
 
