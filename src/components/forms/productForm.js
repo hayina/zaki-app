@@ -20,11 +20,10 @@ export default class ProductForm extends React.Component {
         }
 
         const errors = {
-            prixError: '',
-            prixPromotionError: '',
-            descriptionError: ''
+            prix: '',
+            prixPromotion: '',
+            description: ''
         }
-
 
         this.state = {
             fields,
@@ -42,37 +41,38 @@ export default class ProductForm extends React.Component {
         });
     }
 
-    validateForm() {
+    validateForm(rules) {
 
-        const errors = {
-            prixError: '',
-            prixPromotionError: '',
-            descriptionError: ''
-        }
-
+        const { errors, fields } = this.state
         let hasError = false;
 
-        if (this.state.fields.description.length < 1) {
-            errors.descriptionError = "Le champs description est obligatoire"
-            hasError = true;
-        }
+        Object.entries(rules).forEach(([fieldName, arrayRules]) => {
 
-        const { prix } = this.state.fields
+            errors[fieldName] = ''
 
-        if (prix.length > 0) {
-            if (isNaN(parseFloat(prix)) || !isFinite(prix)) {
-                errors.prixError = "Le champs prix doit être un nombre"
-                hasError = true;
-            }
-        } else {
-            errors.prixError = "Le champs prix est obligatoire"
-            hasError = true;
-        }
+            arrayRules.some((rule) => {
 
-        if (this.state.fields.isPromotion && this.state.fields.prixPromotion.length < 1) {
-            errors.prixPromotionError = "Le champs prix promotion est obligatoire"
-            hasError = true;
-        }
+                const fieldVal = fields[fieldName]
+
+                switch (rule) {
+                    case 'required':
+                        if (fieldVal.length < 1) {
+                            errors[fieldName] = 'Ce Champs est obligatoire'
+                            hasError = true;
+                            return true
+                        }
+                    case 'number':
+                        if (isNaN(parseFloat(fieldVal)) || !isFinite(fieldVal)) {
+                            errors[fieldName] = "Ce champs doit être un nombre"
+                            hasError = true
+                            return true
+                        }
+                    default:
+                        return false
+                }
+            })
+        })
+   
 
         this.setState({
             errors,
@@ -85,7 +85,18 @@ export default class ProductForm extends React.Component {
     submitForm() {
         console.log("Start Validating ...")
 
-        const hasError = this.validateForm();
+        // Setting validation rules
+        const rules = {
+            prix: ['required', 'number'],
+            description: ['required']
+        }
+
+        if (this.state.fields.isPromotion) {
+            rules.prixPromotion = ['required', 'number']
+        }
+
+        // Form validation
+        const hasError = this.validateForm(rules);
 
         if (!hasError) {
             console.log("Submiting ...")
@@ -125,7 +136,7 @@ export default class ProductForm extends React.Component {
                                 name="description" rows="10"
                                 value={this.state.fields.description} onChange={this.handleInputChange}
                             />
-                            <ValidationError hasError={this.state.hasError} textError={this.state.errors.descriptionError} />
+                            <ValidationError hasError={this.state.hasError} textError={this.state.errors.description} />
                         </div>
                     </div>
 
@@ -136,7 +147,7 @@ export default class ProductForm extends React.Component {
                                 type="text" name="prix"
                                 value={this.state.fields.prix} onChange={this.handleInputChange}
                             />
-                            <ValidationError hasError={this.state.hasError} textError={this.state.errors.prixError} />
+                            <ValidationError hasError={this.state.hasError} textError={this.state.errors.prix} />
                         </div>
                     </div>
 
@@ -157,9 +168,18 @@ export default class ProductForm extends React.Component {
                                 type="text" name="prixPromotion" 
                                 checked={this.state.fields.prixPromotion} onChange={this.handleInputChange}
                             />
-                            <ValidationError hasError={this.state.hasError} textError={this.state.errors.prixPromotionError} />
+                            <ValidationError hasError={this.state.hasError} textError={this.state.errors.prixPromotion} />
                         </div>
                     </div>
+
+                    <div className="form-line">
+                        <Label label="Photos" />
+                        <div className="form-data">
+                            <input
+                                type="file" name="photos"
+                            />
+                        </div>
+                    </div>                 
 
                 </div>
 
