@@ -8,32 +8,45 @@ import '../../css/productForm.css'
 export default class ProductForm extends React.Component {
 
 
-    constructor(props) {
+    constructor() {
+        super();
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleImageChange = this.handleImageChange.bind(this);
+    }
 
-        super(props);
+    componentWillMount() {
+        console.log('componentWillMount ...')
+        this.initFormState()
+    }
 
+    componentDidMount() {
+        console.log('componentDidMount ...')
+    }
+
+    initFormState() {
+        
+        console.log('initFormState ...')
         const fields = {
             isPromotion: false,
             prix: '',
             prixPromotion: '',
-            description: ''
+            description: '',
+            images: [],          
         }
 
         const errors = {
             prix: '',
             prixPromotion: '',
-            description: ''
+            description: '',
+            images: ''
         }
 
-        this.state = {
+        this.setState({
             fields,
             errors,
-            images: [],
             hasError: false
-        }
+        }, () => console.log('initFormState END'));
 
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleImageChange = this.handleImageChange.bind(this);
     }
 
     handleInputChange(event) {
@@ -92,7 +105,8 @@ export default class ProductForm extends React.Component {
         // Setting validation rules
         const rules = {
             prix: ['required', 'number'],
-            description: ['required']
+            description: ['required'],
+            images: ['required']
         }
 
         if (this.state.fields.isPromotion) {
@@ -104,6 +118,7 @@ export default class ProductForm extends React.Component {
 
         if (!hasError) {
             console.log("Submiting ...")
+            this.initFormState()
         }
     }
 
@@ -114,17 +129,18 @@ export default class ProductForm extends React.Component {
         
         console.log("FILE INPUT HAS CHANGED >> " + e.target.value)
         const { files } = e.target
+        // const { images } = this.state.fields
         console.log(files)
         const filesAmount = files.length
 
         for (let i = 0; i < filesAmount; i++) {
             const reader = new FileReader();
             reader.onloadend = () => {
-
                 this.setState({
-                    images: [...this.state.images, reader.result]
+                    fields: { ...this.state.fields, images: [...this.state.fields.images, reader.result] }
                 }, () => {
-                    if (this.state.images.length === filesAmount) {
+                    if (this.state.fields.images.length === filesAmount) {
+                        // console.log("m7i init input")
                         this.imgInput.value = ''
                     }
                 });
@@ -135,9 +151,9 @@ export default class ProductForm extends React.Component {
     }
 
     deleteImage(index) {
-        const toDelete = this.state.images[index]
+        const toDelete = this.state.fields.images[index]
         this.setState({
-            images: this.state.images.filter((img, i) => i !== index)
+            fields: { ...this.state.fields, images: this.state.fields.images.filter((img, i) => i !== index) }
         }, () => { this.imgInput.value = '' })
     }
 
@@ -217,11 +233,12 @@ export default class ProductForm extends React.Component {
                                 type="file" multiple="true" 
                                 ref={inp => { this.imgInput = inp }}
                                 onChange={this.handleImageChange}
-                            />({this.state.images.length})
+                            />({this.state.fields.images.length})
+                            <ValidationError hasError={this.state.hasError} textError={this.state.errors.images} />
                             <div className="imagePreview">
 
                                 {
-                                    this.state.images.map((img, i) => (
+                                    this.state.fields.images.map((img, i) => (
                                         <div className="img-item" key={i}>
                                             <div className="img-header">
                                                 <h4>Photo n° {(i + 1)}</h4>
