@@ -28,10 +28,12 @@ export default class ProductForm extends React.Component {
         this.state = {
             fields,
             errors,
+            images: [],
             hasError: false
         }
 
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleImageChange = this.handleImageChange.bind(this);
     }
 
     handleInputChange(event) {
@@ -61,12 +63,14 @@ export default class ProductForm extends React.Component {
                             hasError = true;
                             return true
                         }
+                        return false
                     case 'number':
                         if (isNaN(parseFloat(fieldVal)) || !isFinite(fieldVal)) {
                             errors[fieldName] = "Ce champs doit être un nombre"
                             hasError = true
                             return true
                         }
+                        return false
                     default:
                         return false
                 }
@@ -101,6 +105,40 @@ export default class ProductForm extends React.Component {
         if (!hasError) {
             console.log("Submiting ...")
         }
+    }
+
+
+
+    handleImageChange(e) {
+
+        
+        console.log("FILE INPUT HAS CHANGED >> " + e.target.value)
+        const { files } = e.target
+        console.log(files)
+        const filesAmount = files.length
+
+        for (let i = 0; i < filesAmount; i++) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+
+                this.setState({
+                    images: [...this.state.images, reader.result]
+                }, () => {
+                    if (this.state.images.length === filesAmount) {
+                        this.imgInput.value = ''
+                    }
+                });
+
+            }
+            reader.readAsDataURL(files[i])
+        }
+    }
+
+    deleteImage(index) {
+        const toDelete = this.state.images[index]
+        this.setState({
+            images: this.state.images.filter((img, i) => i !== index)
+        }, () => { this.imgInput.value = '' })
     }
 
     render() {
@@ -176,8 +214,31 @@ export default class ProductForm extends React.Component {
                         <Label label="Photos" />
                         <div className="form-data">
                             <input
-                                type="file" name="photos"
-                            />
+                                type="file" multiple="true" 
+                                ref={inp => { this.imgInput = inp }}
+                                onChange={this.handleImageChange}
+                            />({this.state.images.length})
+                            <div className="imagePreview">
+
+                                {
+                                    this.state.images.map((img, i) => (
+                                        <div className="img-item" key={i}>
+                                            <div className="img-header">
+                                                <h4>Photo n° {(i + 1)}</h4>
+                                                <button 
+                                                    type="button" className="supp-img btn btn-danger"
+                                                    onClick={() => this.deleteImage(i)}
+                                                >
+                                                supprimer
+                                                </button>
+                                            </div>
+
+                                            <img src={img} />
+                                        </div>
+                                    ))
+                                }
+
+                            </div>
                         </div>
                     </div>                 
 
