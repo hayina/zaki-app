@@ -1,4 +1,7 @@
 {
+
+    "parser": "babel-eslint",
+    
     "extends": "airbnb",
 
     "env": {
@@ -6,6 +9,8 @@
         "node": true
     },
 
+    
+    
     "rules": {
         "quotes" : 0,
         "react/jsx-filename-extension" : 0,

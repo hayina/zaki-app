@@ -21,6 +21,19 @@ export default class ProductForm extends React.Component {
 
     componentDidMount() {
         console.log('componentDidMount ...')
+        this.callApi()
+            // .then(res => this.setState({ response: res.express }))
+            // .catch(err => console.log(err))
+    }
+
+    async callApi() {
+
+        const response = await fetch('/api/products/');
+        const body = await response.json();
+
+        console.log('async ...', body)
+
+        return body;
     }
 
     initFormState() {
@@ -125,7 +138,6 @@ export default class ProductForm extends React.Component {
 
 
     handleImageChange(e) {
-
         
         console.log("FILE INPUT HAS CHANGED >> " + e.target.value)
         const { files } = e.target
@@ -154,12 +166,10 @@ export default class ProductForm extends React.Component {
         const toDelete = this.state.fields.images[index]
         this.setState({
             fields: { ...this.state.fields, images: this.state.fields.images.filter((img, i) => i !== index) }
-        }, () => { this.imgInput.value = '' })
+        })
     }
 
     render() {
-
-    
 
         return (
             <form action="">
@@ -233,28 +243,26 @@ export default class ProductForm extends React.Component {
                                 type="file" multiple="true" 
                                 ref={inp => { this.imgInput = inp }}
                                 onChange={this.handleImageChange}
-                            />({this.state.fields.images.length})
+                            />
                             <ValidationError hasError={this.state.hasError} textError={this.state.errors.images} />
                             <div className="imagePreview">
-
-                                {
-                                    this.state.fields.images.map((img, i) => (
-                                        <div className="img-item" key={i}>
-                                            <div className="img-header">
-                                                <h4>Photo n° {(i + 1)}</h4>
-                                                <button 
-                                                    type="button" className="supp-img btn btn-danger"
-                                                    onClick={() => this.deleteImage(i)}
-                                                >
-                                                supprimer
-                                                </button>
-                                            </div>
-
-                                            <img src={img} />
+                            {
+                                this.state.fields.images.map((img, i) => (
+                                    <div className="img-item" key={i}>
+                                        <div className="img-header">
+                                            <h4>Photo n° {(i + 1)}</h4>
+                                            <button 
+                                                type="button" className="supp-img btn btn-danger"
+                                                onClick={() => this.deleteImage(i)}
+                                            >
+                                            supprimer
+                                            </button>
                                         </div>
-                                    ))
-                                }
 
+                                        <img src={img} />
+                                    </div>
+                                ))
+                            }
                             </div>
                         </div>
                     </div>                 

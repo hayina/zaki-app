@@ -4,7 +4,8 @@ module.exports = {
 
     // devtool: 'source-map',
 
-    entry: './src/app.js',
+    // entry: './src/app.js',
+    entry: ['babel-polyfill', './src/app.js'],
 
     output: {
         filename: "./public/app.min.js",
@@ -17,8 +18,8 @@ module.exports = {
             use: {
               loader: 'babel-loader',
               options: {
-                presets: ['react', 'env'],
-                plugins: ['transform-object-rest-spread']
+                presets: ['react', 'env', 'stage-0'],
+                plugins: ['transform-object-rest-spread', 'transform-regenerator']
               }
             }
           },
