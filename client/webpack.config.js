@@ -2,8 +2,15 @@
 
 module.exports = {
 
+    devServer: {
+      proxy: {
+        "/api": {
+          target: "http://localhost:4000",
+        }
+      },
+    },
     // devtool: 'source-map',
-
+    devtool: 'inline-source-map',
     // entry: './src/app.js',
     entry: ['babel-polyfill', './src/app.js'],
 

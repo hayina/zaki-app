@@ -1,53 +1,16 @@
 {
-  "name": "zaki-app",
+  "name": "zaki-app-server",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
-  "proxy": {
-    "/api/*": {
-      "target": "http://localhost:4000/",
-      "changeOrigin": true
-    }
-  },
-  "scripts": {
-    "dev": "webpack -d && webpack-dev-server --content-base src/ --inline --hot"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hayina/zaki-app.git"
-  },
+  "scripts": { },
   "author": "Youssef LECHQAR",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/hayina/zaki-app/issues"
-  },
-  "homepage": "https://github.com/hayina/zaki-app#readme",
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.2.2",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-regenerator": "^6.26.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
-    "css-loader": "^0.28.9",
-    "eslint": "^4.17.0",
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.6.1",
-    "nodemon": "^1.17.1",
-    "style-loader": "^0.20.1",
-    "webpack": "^3.11.0",
-    "webpack-dev-server": "^2.11.1"
+    "nodemon": "^1.17.1"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
-    "mongoose": "^5.0.7",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "mongoose": "^5.0.7"
   }
 }
