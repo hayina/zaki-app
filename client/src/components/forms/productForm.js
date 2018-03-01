@@ -21,20 +21,12 @@ export default class ProductForm extends React.Component {
 
     componentDidMount() {
         console.log('componentDidMount ...')
-        this.callApi()
+        // this.callApi()
             // .then(res => this.setState({ response: res.express }))
             // .catch(err => console.log(err))
     }
 
-    async callApi() {
 
-        const response = await fetch('/api/products/');
-        const body = await response.json();
-
-        console.log('async ...', body)
-
-        return body;
-    }
 
     initFormState() {
         
@@ -119,7 +111,7 @@ export default class ProductForm extends React.Component {
         const rules = {
             prix: ['required', 'number'],
             description: ['required'],
-            images: ['required']
+            // images: ['required']
         }
 
         if (this.state.fields.isPromotion) {
@@ -131,11 +123,31 @@ export default class ProductForm extends React.Component {
 
         if (!hasError) {
             console.log("Submiting ...")
-            this.initFormState()
+
+            this.postProductApi()
+
         }
     }
 
 
+
+    async postProductApi() {
+
+        const product = JSON.stringify(this.state.fields)
+        console.log('postProductApi ...', product)
+
+        const response = await fetch('/api/products/', {
+            method: 'POST',
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            body: product
+        });
+        console.log("postProductApi END")
+        this.initFormState()
+        
+
+    }
 
     handleImageChange(e) {
         
