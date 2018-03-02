@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from 'react-router-dom'
 
 import '../css/productList.css'
 
@@ -77,6 +78,7 @@ export default class ProductList extends React.Component {
                                 <div className="p_prix _col">{product.prix}</div>
                                 <div className="p_isPromotion _col">{product.isPromotion}</div>
                                 <div className="p_prixPromotion _col">{product.prixPromotion}</div>
+                                <Link to={"/products/edit/" + product._id}>modifier</Link>
                             </div>
                         ))
                     }

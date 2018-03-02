@@ -14,8 +14,8 @@ router.get('/products', (req, res, next) => {
 
 // search for specific product
 router.get('/products/:id', (req, res, next) => {
-    Product.find({ _id: req.params.id }).then((products) => {
-        res.send(products)
+    Product.findOne({ _id: req.params.id }).then((product) => {
+        res.send(product)
     })
     .catch(next)
 })

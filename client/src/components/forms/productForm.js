@@ -20,18 +20,38 @@ export default class ProductForm extends React.Component {
     }
 
     componentDidMount() {
-        console.log('componentDidMount ...')
-        // this.callApi()
-            // .then(res => this.setState({ response: res.express }))
-            // .catch(err => console.log(err))
+        console.log('componentDidMount ...', this.state.fields)
+
+        const _idProduct = this.props.match.params.id
+        if (_idProduct !== undefined) {
+            this.getProductToEditApi(_idProduct)
+                .then(product => this.setState({ 
+                    fields: { ...product, images: [] }
+                    // fields: { ...this.state.fields, product }
+                }, () => console.log('getProductToEditApi STATE ...', this.state.fields)))
+                .catch(err => console.log(err))
+        }
+        else {
+            // 
+        }
+
+
     }
 
 
+    async getProductToEditApi(_idProduct) {
 
+        const response = await fetch('/api/products/' + _idProduct);
+        const _product = await response.json();
+
+        return _product
+
+    }
     initFormState() {
         
         console.log('initFormState ...')
         const fields = {
+            _id: null,
             isPromotion: false,
             prix: '',
             prixPromotion: '',
