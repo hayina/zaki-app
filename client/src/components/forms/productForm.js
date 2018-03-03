@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios'
+
 import Label from './formItems/label'
 import ValidationError from './validationError'
 
@@ -15,41 +17,44 @@ export default class ProductForm extends React.Component {
     }
 
     componentWillMount() {
-        console.log('componentWillMount ...')
         this.initFormState()
     }
 
     componentDidMount() {
-        console.log('componentDidMount ...', this.state.fields)
 
         const _idProduct = this.props.match.params.id
+
         if (_idProduct !== undefined) {
+
             this.getProductToEditApi(_idProduct)
-                .then(product => this.setState({ 
-                    fields: { ...product, images: [] }
-                    // fields: { ...this.state.fields, product }
-                }, () => console.log('getProductToEditApi STATE ...', this.state.fields)))
+
+                .then(product => {
+                    this.setState(
+                        { fields: { ...product, images: [] } },
+                        () => console.log('Product To Edit from State : ', this.state.fields)
+                    )
+                })
                 .catch(err => console.log(err))
         }
         else {
             // 
         }
 
-
     }
 
 
     async getProductToEditApi(_idProduct) {
 
-        const response = await fetch('/api/products/' + _idProduct);
-        const _product = await response.json();
+        const response = await axios.get('/api/products/' + _idProduct);
+        const _product = response.data;
+
+        console.log('Product To Edit from API : ', _product)
 
         return _product
 
     }
     initFormState() {
         
-        console.log('initFormState ...')
         const fields = {
             _id: null,
             isPromotion: false,
@@ -70,7 +75,7 @@ export default class ProductForm extends React.Component {
             fields,
             errors,
             hasError: false
-        }, () => console.log('initFormState END'));
+        });
 
     }
 
@@ -125,7 +130,7 @@ export default class ProductForm extends React.Component {
     }
 
     submitForm() {
-        console.log("Start Validating ...")
+      
 
         // Setting validation rules
         const rules = {
@@ -142,10 +147,7 @@ export default class ProductForm extends React.Component {
         const hasError = this.validateForm(rules);
 
         if (!hasError) {
-            console.log("Submiting ...")
-
             this.postProductApi()
-
         }
     }
 
@@ -153,19 +155,14 @@ export default class ProductForm extends React.Component {
 
     async postProductApi() {
 
-        const product = JSON.stringify(this.state.fields)
-        console.log('postProductApi ...', product)
-
-        const response = await fetch('/api/products/', {
-            method: 'POST',
-            headers: new Headers({
-                'Content-Type': 'application/json'
-            }),
-            body: product
-        });
-        console.log("postProductApi END")
-        this.initFormState()
-        
+        try {
+            const response = await axios.post('/api/products/', this.state.fields)
+            console.log(response);
+            this.initFormState()
+        } catch (error) {
+            console.error(error);
+            console.log(error.response.data.message)
+        }
 
     }
 
@@ -262,7 +259,7 @@ export default class ProductForm extends React.Component {
                         <div className="form-data">
                             <input 
                                 type="text" name="prixPromotion" 
-                                checked={this.state.fields.prixPromotion} onChange={this.handleInputChange}
+                                value={this.state.fields.prixPromotion} onChange={this.handleInputChange}
                             />
                             <ValidationError hasError={this.state.hasError} textError={this.state.errors.prixPromotion} />
                         </div>

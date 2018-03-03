@@ -11,6 +11,7 @@ app.use(bodyParser.json())
 app.use('/api', require('./api/routes'))
 
 app.use((err, req, res, next) => {
+    console.log("err => "+err.message)
     res.status(500).send({ message: err.message })
 })
 

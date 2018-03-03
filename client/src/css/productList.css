@@ -10,3 +10,8 @@
 ._col {
 
 }
+
+
+.deleteIsLoading {
+    opacity: 0.4;
+}
