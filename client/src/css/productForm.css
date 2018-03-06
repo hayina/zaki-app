@@ -25,3 +25,24 @@
 .radio-grp {
 
 }
+
+.imagePreview {
+    margin: 10px 0px;
+}
+
+.img-item {
+    margin-bottom: 20px;
+    display: block;
+}
+
+.img-item img {
+    border: 1px solid #d3d3d3;
+}
+
+.img-header {
+
+}
+
+.supp-img {
+    
+}

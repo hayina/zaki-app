@@ -2,9 +2,17 @@
 
 module.exports = {
 
+    devServer: {
+      proxy: {
+        "/api": {
+          target: "http://localhost:4000",
+        }
+      },
+    },
     // devtool: 'source-map',
-
-    entry: './src/app.js',
+    devtool: 'inline-source-map',
+    // entry: './src/app.js',
+    entry: ['babel-polyfill', './src/app.js'],
 
     output: {
         filename: "./public/app.min.js",
@@ -17,8 +25,8 @@ module.exports = {
             use: {
               loader: 'babel-loader',
               options: {
-                presets: ['react', 'env'],
-                plugins: ['transform-object-rest-spread']
+                presets: ['react', 'env', 'stage-0'],
+                plugins: ['transform-object-rest-spread', 'transform-regenerator']
               }
             }
           },

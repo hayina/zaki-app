@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios'
+
 import Label from './formItems/label'
 import ValidationError from './validationError'
 
@@ -8,30 +10,73 @@ import '../../css/productForm.css'
 export default class ProductForm extends React.Component {
 
 
-    constructor(props) {
+    constructor() {
+        super();
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleImageChange = this.handleImageChange.bind(this);
+    }
 
-        super(props);
+    componentWillMount() {
+        this.initFormState()
+    }
 
+    componentDidMount() {
+
+        const _idProduct = this.props.match.params.id
+
+        if (_idProduct !== undefined) {
+
+            this.getProductToEditApi(_idProduct)
+
+                .then(product => {
+                    this.setState(
+                        { fields: { ...product, images: [] } },
+                        () => console.log('Product To Edit from State : ', this.state.fields)
+                    )
+                })
+                .catch(err => console.log(err))
+        }
+        else {
+            // 
+        }
+
+    }
+
+
+    async getProductToEditApi(_idProduct) {
+
+        const response = await axios.get('/api/products/' + _idProduct);
+        const _product = response.data;
+
+        console.log('Product To Edit from API : ', _product)
+
+        return _product
+
+    }
+    initFormState() {
+        
         const fields = {
+            _id: null,
             isPromotion: false,
             prix: '',
             prixPromotion: '',
-            description: ''
+            description: '',
+            images: [],          
         }
 
         const errors = {
             prix: '',
             prixPromotion: '',
-            description: ''
+            description: '',
+            images: ''
         }
 
-        this.state = {
+        this.setState({
             fields,
             errors,
             hasError: false
-        }
+        });
 
-        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
     handleInputChange(event) {
@@ -90,12 +135,13 @@ export default class ProductForm extends React.Component {
     }
 
     submitForm() {
-        console.log("Start Validating ...")
+      
 
         // Setting validation rules
         const rules = {
             prix: ['required', 'number'],
-            description: ['required']
+            description: ['required'],
+            // images: ['required']
         }
 
         if (this.state.fields.isPromotion) {
@@ -106,13 +152,58 @@ export default class ProductForm extends React.Component {
         const hasError = this.validateForm(rules);
 
         if (!hasError) {
-            console.log("Submiting ...")
+            this.postProductApi()
         }
     }
 
-    render() {
 
-    
+
+    async postProductApi() {
+
+        try {
+            const response = await axios.post('/api/products/', this.state.fields)
+            console.log(response);
+            this.initFormState()
+        } catch (error) {
+            console.error(error);
+            console.log(error.response.data.message)
+        }
+
+    }
+
+    handleImageChange(e) {
+        
+        console.log("FILE INPUT HAS CHANGED >> " + e.target.value)
+        const { files } = e.target
+        // const { images } = this.state.fields
+        console.log(files)
+        const filesAmount = files.length
+
+        for (let i = 0; i < filesAmount; i++) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                this.setState({
+                    fields: { ...this.state.fields, images: [...this.state.fields.images, reader.result] }
+                }, () => {
+                    if (this.state.fields.images.length === filesAmount) {
+                        // console.log("m7i init input")
+                        this.imgInput.value = ''
+                    }
+                });
+
+            }
+            reader.readAsDataURL(files[i])
+        }
+    }
+
+    deleteImage(index) {
+        const toDelete = this.state.fields.images[index]
+        this.setState({
+            fields: { ...this.state.fields, images: this.state.fields.images.filter((img, i) => i !== index) }
+        })
+    }
+
+    render() {
 
         return (
             <form action="">
@@ -173,7 +264,7 @@ export default class ProductForm extends React.Component {
                         <div className="form-data">
                             <input 
                                 type="text" name="prixPromotion" 
-                                checked={this.state.fields.prixPromotion} onChange={this.handleInputChange}
+                                value={this.state.fields.prixPromotion} onChange={this.handleInputChange}
                             />
                             <ValidationError hasError={this.state.hasError} textError={this.state.errors.prixPromotion} />
                         </div>
@@ -183,8 +274,30 @@ export default class ProductForm extends React.Component {
                         <Label label="Photos" />
                         <div className="form-data">
                             <input
-                                type="file" name="photos"
+                                type="file" multiple="true" 
+                                ref={inp => { this.imgInput = inp }}
+                                onChange={this.handleImageChange}
                             />
+                            <ValidationError hasError={this.state.hasError} textError={this.state.errors.images} />
+                            <div className="imagePreview">
+                            {
+                                this.state.fields.images.map((img, i) => (
+                                    <div className="img-item" key={i}>
+                                        <div className="img-header">
+                                            <h4>Photo n° {(i + 1)}</h4>
+                                            <button 
+                                                type="button" className="supp-img btn btn-danger"
+                                                onClick={() => this.deleteImage(i)}
+                                            >
+                                            supprimer
+                                            </button>
+                                        </div>
+
+                                        <img src={img} />
+                                    </div>
+                                ))
+                            }
+                            </div>
                         </div>
                     </div>                 
 
