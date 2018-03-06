@@ -50,23 +50,30 @@ export default class ProductForm extends React.Component {
 
             errors[fieldName] = ''
 
+
+            console.log(fieldName + ' >> ' + arrayRules)
+
             arrayRules.some((rule) => {
 
                 const fieldVal = fields[fieldName]
 
                 switch (rule) {
                     case 'required':
+                        console.log('required')
                         if (fieldVal.length < 1) {
                             errors[fieldName] = 'Ce Champs est obligatoire'
                             hasError = true;
                             return true
                         }
+                        return false
                     case 'number':
+                        console.log('number')
                         if (isNaN(parseFloat(fieldVal)) || !isFinite(fieldVal)) {
                             errors[fieldName] = "Ce champs doit être un nombre"
                             hasError = true
                             return true
                         }
+                        return false
                     default:
                         return false
                 }
