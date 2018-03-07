@@ -2,7 +2,7 @@
   "name": "zaki-app-server",
   "version": "1.0.0",
   "description": "",
-  "scripts": { },
+  "scripts": {},
   "author": "Youssef LECHQAR",
   "license": "MIT",
   "devDependencies": {
