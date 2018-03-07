@@ -1,4 +1,6 @@
 const express = require('express')
+const fs = require('fs')
+
 const Product = require('../models/product')
 
 const router = express.Router()
@@ -24,10 +26,29 @@ router.get('/products/:id', (req, res, next) => {
 router.post('/products', (req, res, next) => {
     console.log("POST request ...", req.body)
 
-    Product.create(req.body).then((_product) => {
-        res.send(_product)
-    })
-    .catch(next)
+
+            // saving image
+
+            req.body.images.forEach(function(img, i){
+                fs.writeFile(
+                    '../images/' + i + '.jpg', 
+                    img.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""), 
+                    { encoding: 'base64' },
+                    (err) => {
+                        console.log("SAVING FILE OK ... " + err)
+                    }
+                );
+              });
+              
+
+    // Product.create(req.body).then((product) => {
+
+    //     console.log(product)
+
+
+    //     res.send(product)
+    // })
+    // .catch(next)
 
 })
 
