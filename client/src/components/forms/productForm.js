@@ -24,6 +24,7 @@ export default class ProductForm extends React.Component {
 
         const _idProduct = this.props.match.params.id
 
+        // edit mode
         if (_idProduct !== undefined) {
 
             this.getProductToEditApi(_idProduct)
@@ -36,6 +37,7 @@ export default class ProductForm extends React.Component {
                 })
                 .catch(err => console.log(err))
         }
+        // new mode
         else {
             // 
         }
