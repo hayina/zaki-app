@@ -55,15 +55,16 @@ export default class ProductForm extends React.Component {
         return _product
 
     }
+
     initFormState() {
         
         const fields = {
-            _id: null,
             isPromotion: false,
             prix: '',
             prixPromotion: '',
             description: '',
             images: [],          
+            images2: [],          
         }
 
         const errors = {
@@ -141,8 +142,8 @@ export default class ProductForm extends React.Component {
 
         // Setting validation rules
         const rules = {
-            prix: ['required', 'number'],
-            description: ['required'],
+            // prix: ['required', 'number'],
+            // description: ['required'],
             // images: ['required']
         }
 
@@ -162,6 +163,7 @@ export default class ProductForm extends React.Component {
 
     async postProductApi() {
 
+        console.log('POST product to API')
         try {
             const response = await axios.post('/api/products/', this.state.fields)
             console.log(response);
@@ -184,8 +186,14 @@ export default class ProductForm extends React.Component {
         for (let i = 0; i < filesAmount; i++) {
             const reader = new FileReader();
             reader.onloadend = () => {
+
+
                 this.setState({
-                    fields: { ...this.state.fields, images: [...this.state.fields.images, reader.result] }
+                    fields: {
+                        ...this.state.fields,
+                        images: [...this.state.fields.images, reader.result],
+                        images2: [...this.state.fields.images2, files[i]]
+                    }
                 }, () => {
                     if (this.state.fields.images.length === filesAmount) {
                         // console.log("m7i init input")
