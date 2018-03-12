@@ -1,5 +1,6 @@
 const express = require('express')
 const fs = require('fs')
+const multer  = require('multer')
 
 const Product = require('../models/product')
 
@@ -23,22 +24,31 @@ router.get('/products/:id', (req, res, next) => {
 })
 
 // add new product
-router.post('/products', (req, res, next) => {
+
+const upload = multer({ dest: 'galerie/' })
+
+router.post('/products', upload.array('images2'), (req, res, next) => {
+
     console.log("POST request ...", req.body)
 
+    console.log("req.files ...", req.files)
+
+    req.files.forEach(function(f, i){
+        console.log(i + " : " + f)
+    })
 
             // saving image
 
-            req.body.images.forEach(function(img, i){
-                fs.writeFile(
-                    '../images/' + i + '.jpg', 
-                    img.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""), 
-                    { encoding: 'base64' },
-                    (err) => {
-                        console.log("SAVING FILE OK ... " + err)
-                    }
-                );
-              });
+            // req.body.images.forEach(function(img, i){
+            //     fs.writeFile(
+            //         '../images/' + i + '.jpg', 
+            //         img.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""), 
+            //         { encoding: 'base64' },
+            //         (err) => {
+            //             console.log("SAVING FILE OK ... " + err)
+            //         }
+            //     );
+            //   });
               
 
     // Product.create(req.body).then((product) => {

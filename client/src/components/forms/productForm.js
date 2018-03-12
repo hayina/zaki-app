@@ -164,16 +164,23 @@ export default class ProductForm extends React.Component {
     async postProductApi() {
 
         console.log('POST product to API')
+
+        const config = { headers: { 'content-type': 'multipart/form-data' } }
+
+        this.state.fields.images = []
+
+        const formData = new FormData();
+        Object.keys(this.state.fields).forEach(key => formData.append(key, this.state.fields[key]));
+
         try {
-            const response = await axios.post('/api/products/', this.state.fields)
-            console.log(response);
+            const response = await axios.post('/api/products/', formData, config)
             this.initFormState()
         } catch (error) {
             console.error(error);
-            console.log(error.response.data.message)
         }
 
     }
+
 
     handleImageChange(e) {
         
