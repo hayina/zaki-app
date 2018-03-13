@@ -63,8 +63,7 @@ export default class ProductForm extends React.Component {
             prix: '',
             prixPromotion: '',
             description: '',
-            images: [],          
-            images2: [],          
+            images: [],                
         }
 
         const errors = {
@@ -77,6 +76,7 @@ export default class ProductForm extends React.Component {
         this.setState({
             fields,
             errors,
+            images2: [],    
             hasError: false
         });
 
@@ -169,8 +169,17 @@ export default class ProductForm extends React.Component {
 
         this.state.fields.images = []
 
+        console.log("formData >> ")
         const formData = new FormData();
-        Object.keys(this.state.fields).forEach(key => formData.append(key, this.state.fields[key]));
+
+        Object.keys(this.state.fields).forEach((key) => {
+            console.log(key)
+            formData.append(key, this.state.fields[key])
+        });
+        
+        this.state.images2.forEach((img) => {
+            formData.append('images2', img)
+        });
 
         try {
             const response = await axios.post('/api/products/', formData, config)
@@ -199,8 +208,9 @@ export default class ProductForm extends React.Component {
                     fields: {
                         ...this.state.fields,
                         images: [...this.state.fields.images, reader.result],
-                        images2: [...this.state.fields.images2, files[i]]
-                    }
+                    },
+                    // images2: files[0]
+                    images2: [...this.state.images2, files[i]]
                 }, () => {
                     if (this.state.fields.images.length === filesAmount) {
                         // console.log("m7i init input")

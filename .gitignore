@@ -1,7 +1,8 @@
 
 node_modules/
-client/node_modules/
-public/
-.vscode/
 package-lock.json
+client/node_modules/
+client/public/
 client/package-lock.json
+gallery/
+.vscode/

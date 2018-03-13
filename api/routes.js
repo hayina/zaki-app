@@ -1,6 +1,7 @@
 const express = require('express')
 const fs = require('fs')
 const multer  = require('multer')
+const path = require('path')
 
 const Product = require('../models/product')
 
@@ -25,17 +26,36 @@ router.get('/products/:id', (req, res, next) => {
 
 // add new product
 
-const upload = multer({ dest: 'galerie/' })
+function createProduct(req, res, next) {
 
-router.post('/products', upload.array('images2'), (req, res, next) => {
+    Product.create(req.body).
+        then((product) => {
+            req.product = product._id;
+            next();
+        })
+        .catch(next)
+
+}
+
+
+const storage = multer.diskStorage({
+    destination: './gallery',
+    filename(req, file, cb) {
+      cb(null, req.product + '' + path.extname(file.originalname));
+    },
+  });
+
+const upload = multer({ storage });
+
+router.post('/products', createProduct, upload.array('images2'), (req, res, next) => {
 
     console.log("POST request ...", req.body)
 
     console.log("req.files ...", req.files)
 
-    req.files.forEach(function(f, i){
-        console.log(i + " : " + f)
-    })
+
+    res.send(req.product)
+ 
 
             // saving image
 
@@ -49,17 +69,6 @@ router.post('/products', upload.array('images2'), (req, res, next) => {
             //         }
             //     );
             //   });
-              
-
-    // Product.create(req.body).then((product) => {
-
-    //     console.log(product)
-
-
-    //     res.send(product)
-    // })
-    // .catch(next)
-
 })
 
 // update product
