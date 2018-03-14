@@ -7,9 +7,7 @@ const app = express()
 mongoose.connect('mongodb://localhost:27017/zaki')
 mongoose.Promise = global.Promise
 
-app.use(bodyParser.json({
-    limit: '10mb'
-}))
+app.use(bodyParser.json())
 app.use('/api', require('./api/routes'))
 
 app.use((err, req, res, next) => {

@@ -28,8 +28,8 @@ router.get('/products/:id', (req, res, next) => {
 
 function createProduct(req, res, next) {
 
-    Product.create(req.body).
-        then((product) => {
+    Product.create(req.body)
+        .then((product) => {
             req.product = product._id;
             next();
         })
@@ -41,7 +41,8 @@ function createProduct(req, res, next) {
 const storage = multer.diskStorage({
     destination: './gallery',
     filename(req, file, cb) {
-      cb(null, req.product + '' + path.extname(file.originalname));
+ 
+      cb(null, req.product + '_' + new Date().getTime() + '' + path.extname(file.originalname));
     },
   });
 
@@ -53,22 +54,7 @@ router.post('/products', createProduct, upload.array('images2'), (req, res, next
 
     console.log("req.files ...", req.files)
 
-
     res.send(req.product)
- 
-
-            // saving image
-
-            // req.body.images.forEach(function(img, i){
-            //     fs.writeFile(
-            //         '../images/' + i + '.jpg', 
-            //         img.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""), 
-            //         { encoding: 'base64' },
-            //         (err) => {
-            //             console.log("SAVING FILE OK ... " + err)
-            //         }
-            //     );
-            //   });
 })
 
 // update product
