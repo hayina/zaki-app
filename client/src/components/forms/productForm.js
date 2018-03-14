@@ -48,7 +48,7 @@ export default class ProductForm extends React.Component {
     async getProductToEditApi(_idProduct) {
 
         const response = await axios.get('/api/products/' + _idProduct);
-        const _product = response.data;
+        const _product = response.data
 
         console.log('Product To Edit from API : ', _product)
 

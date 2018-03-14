@@ -23,8 +23,8 @@ export default class Layout extends React.Component {
                 <Header />
 
                 <Switch>
-                    <Route exact path="/products" component={ProductList} />
                     <Route exact path="/" component={Home} />
+                    <Route exact path="/products" component={ProductList} />
                     <Route exact path="/products/new" component={ProductForm} />
                     <Route exact path="/products/edit/:id" component={ProductForm} />
                 </Switch>
