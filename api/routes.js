@@ -4,6 +4,7 @@ const multer  = require('multer')
 const path = require('path')
 
 const Product = require('../models/product')
+const Image = require('../models/image')
 
 const router = express.Router()
 
@@ -26,35 +27,37 @@ router.get('/products/:id', (req, res, next) => {
 
 // add new product
 
-function createProduct(req, res, next) {
-
-    Product.create(req.body)
-        .then((product) => {
-            req.product = product._id;
-            next();
-        })
-        .catch(next)
-
-}
-
-
 const storage = multer.diskStorage({
-    destination: './gallery',
+    destination: './client/public/gallery',
     filename(req, file, cb) {
- 
-      cb(null, req.product + '_' + new Date().getTime() + '' + path.extname(file.originalname));
+      cb(null, new Date().getTime() + '' + path.extname(file.originalname));
     },
   });
 
 const upload = multer({ storage });
 
-router.post('/products', createProduct, upload.array('images2'), (req, res, next) => {
+router.post('/products', upload.array('images2'), (req, res, next) => {
 
-    console.log("POST request ...", req.body)
+    // console.log("POST request ...", req.body)
 
-    console.log("req.files ...", req.files)
+    // console.log("req.files ...", req.files)
 
-    res.send(req.product)
+
+    const product = new Product(req.body)
+
+    req.files.forEach((file) => {
+        product.images.push({
+            name: file.filename,
+            size: file.size,
+        })
+    })
+
+
+    product.save().then((product) => {
+        res.send(product._id)
+    })
+    .catch(next)
+  
 })
 
 // update product

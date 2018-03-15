@@ -96,7 +96,20 @@ export default class ProductList extends React.Component {
                                 <div className="p_isPromotion _col">{product.isPromotion}</div>
                                 <div className="p_prixPromotion _col">{product.prixPromotion}</div>
                                 <Link to={"/products/edit/" + product._id}>modifier</Link>
-                                <a href="#" onClick={() => this.deleteProduct(product._id)}>supprimer</a>
+                                <a href="javascript()" onClick={() => this.deleteProduct(product._id)}>supprimer</a>
+
+                                <div className="gallery">
+                                    {
+                                        product.images.map((img, index) => (
+                                            <div className="img-item">
+                                                <h1 key={img.name}>{img.name}</h1>
+                                                <img src={'/public/gallery/' + img.name} />
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+
+
                             </div>
                         ))
                     }

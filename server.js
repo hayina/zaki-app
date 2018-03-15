@@ -1,13 +1,25 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const path = require('path')
 
 const app = express()
+
+
 
 mongoose.connect('mongodb://localhost:27017/zaki')
 mongoose.Promise = global.Promise
 
+// console.log(path.join(__dirname, 'public/gallery'))
+
+app.use('/gallery', express.static(path.join(__dirname, 'gallery')));
+
+
+
 app.use(bodyParser.json())
+
+
+
 app.use('/api', require('./api/routes'))
 
 app.use((err, req, res, next) => {

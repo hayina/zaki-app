@@ -17,6 +17,7 @@ module.exports = {
 
     output: {
         filename: "./public/app.min.js",
+        publicPath: '/public/'
     },
     module: {
         rules: [
