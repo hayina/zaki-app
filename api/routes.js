@@ -28,7 +28,7 @@ router.get('/products/:id', (req, res, next) => {
 // add new product
 
 const storage = multer.diskStorage({
-    destination: './client/public/gallery',
+    destination: './client/src/gallery',
     filename(req, file, cb) {
       cb(null, new Date().getTime() + '' + path.extname(file.originalname));
     },

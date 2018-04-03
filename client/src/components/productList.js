@@ -103,7 +103,7 @@ export default class ProductList extends React.Component {
                                         product.images.map((img, index) => (
                                             <div className="img-item">
                                                 <h1 key={img.name}>{img.name}</h1>
-                                                <img src={'/public/gallery/' + img.name} />
+                                                <img src={'/gallery/' + img.name} />
                                             </div>
                                         ))
                                     }
