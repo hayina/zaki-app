@@ -5,7 +5,7 @@ import Label from './formItems/label'
 import ValidationError from './validationError'
 
 
-import '../../css/productForm.css'
+import '../../scss/productForm.scss'
 
 export default class ProductForm extends React.Component {
 
@@ -233,7 +233,7 @@ export default class ProductForm extends React.Component {
     render() {
 
         return (
-            <form action="">
+            <form action="" id="product-form-comp">
                 <div className="form-data-wr">
 
                     {/* <div className="form-line">

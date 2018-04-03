@@ -8,7 +8,8 @@ const Image = require('../models/image')
 
 const router = express.Router()
 
-// search for all products
+/////////// search for all products
+
 router.get('/products', (req, res, next) => {
     console.log("GET request ...")
     Product.find({}).then((products) => {
@@ -17,7 +18,8 @@ router.get('/products', (req, res, next) => {
     .catch(next)
 })
 
-// search for specific product
+/////////// search for specific product
+
 router.get('/products/:id', (req, res, next) => {
     Product.findOne({ _id: req.params.id }).then((product) => {
         res.send(product)
@@ -25,7 +27,7 @@ router.get('/products/:id', (req, res, next) => {
     .catch(next)
 })
 
-// add new product
+/////////// add new product
 
 const storage = multer.diskStorage({
     destination: './client/src/gallery',
@@ -36,47 +38,48 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post('/products', upload.array('images2'), (req, res, next) => {
+router.post('/products', upload.array('images2'), async (req, res, next) => {
 
-    // console.log("POST request ...", req.body)
+    const { description, prix, isPromotion, prixPromotion } = req.body;
 
-    // console.log("req.files ...", req.files)
-
-
-    const product = new Product(req.body)
-
-    req.files.forEach((file) => {
-        product.images.push({
-            name: file.filename,
-            size: file.size,
-        })
+    const product = new Product({
+        description, prix, isPromotion, prixPromotion,
+        createDate: Date.now(),
+        images: req.files.map(file => (
+            {
+                name: file.filename,
+                size: file.size,
+            }
+        ))
     })
 
 
-    product.save().then((product) => {
-        res.send(product._id)
-    })
-    .catch(next)
-  
+    const savedProduct = await product.save();
+    
+    res.send(product._id)
+
+
 })
 
-// update product
+/////////// update product
+
 router.put('/products/:id', (req, res, next) => {
     console.log("PUT request ...")
     Product.findByIdAndUpdate({ _id: req.params.id }, req.body).then((_product) => {
         res.send(true)
     })
-    .catch(next)
+
 })
 
-// delete product
+/////////// delete product
+
 router.delete('/products/:id', (req, res, next) => {
     console.log("DELETE request ...")
 
     Product.findByIdAndRemove({ _id: req.params.id }).then((_product) => {
         res.send(true)
     })
-    .catch(next)
+
 })
 
 module.exports = router

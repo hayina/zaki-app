@@ -32,9 +32,13 @@ module.exports = {
               }
             }
           },
+          // {
+          //   test: /\.css$/,
+          //   use: ['style-loader', 'css-loader']
+          // }
           {
-            test: /\.css$/,
-            use: ['style-loader', 'css-loader']
+            test: /\.scss$/,
+            loaders: ["style-loader", "css-loader", "sass-loader"]
           }
         ]
       }

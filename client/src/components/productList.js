@@ -2,7 +2,7 @@ import React from "react"
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 
-import '../css/productList.css'
+import '../scss/productList.scss'
 
 export default class ProductList extends React.Component {
 
@@ -74,7 +74,7 @@ export default class ProductList extends React.Component {
          
         return (
 
-            <div className="list-container">
+            <div className="list-container" id="product-list-comp">
 
                 <h1>ProductList</h1>
 
@@ -101,8 +101,7 @@ export default class ProductList extends React.Component {
                                 <div className="gallery">
                                     {
                                         product.images.map((img, index) => (
-                                            <div className="img-item">
-                                                <h1 key={img.name}>{img.name}</h1>
+                                            <div className="img-item" key={img.name}>
                                                 <img src={'/gallery/' + img.name} />
                                             </div>
                                         ))

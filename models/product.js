@@ -9,7 +9,8 @@ const productSchema = mongoose.Schema({
     prix: { type: Number },
     isPromotion: { type: Boolean, default: false },
     prixPromotion: { type: Number },
-    images: [Image.schema]
+    images: [Image.schema],
+    createDate:  { type: Date },
 
 })
 

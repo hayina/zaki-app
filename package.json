@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "node": "nodemon server.js --ignore client/"
+    "server": "nodemon server.js --ignore client/"
   },
   "author": "Youssef LECHQAR",
   "license": "MIT",
